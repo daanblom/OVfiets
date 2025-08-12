@@ -4,6 +4,22 @@ showHelp() {
     cat << EOF
 Usage: $(basename "$0") [OPTIONS] SEARCH_TERM
 
+Search for OV-fiets locations and show available bike counts.
+
+Flags (optional):
+  -c    Output only the bike count (no station name or icon).
+  -s    Output bike count with a 🚲 icon (for status bar usage).
+  -h    Show this help message and exit.
+
+Arguments:
+  SEARCH_TERM   A case-insensitive string to search for in station names.
+
+Examples:
+  $(basename "$0") Utrecht
+  $(basename "$0") -c "Leiden Centraal, Centrumzijde"
+  $(basename "$0") -s Voorshoten
+
+EOF
 }
 
 bikeAmount () {
@@ -27,5 +43,18 @@ searchLocation() {
 if [ ! -n "$1" ]; then
   showHelp && exit 1
 fi 
+
+while getopts ":chs" opt; do
+    case $opt in
+        c) output="clean" ;;
+        s) output="statusbar" ;;
+        h) showHelp ;;
+        \?) echo "Invalid option: -$OPTARG" >&2; exit 1 ;;
+        :) echo "Option -$OPTARG requires an argument." >&2; exit 1 ;;
+    esac
+done
+shift $((OPTIND - 1))
+
+
 
 searchLocation "$1"
