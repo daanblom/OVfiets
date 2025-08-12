@@ -1,16 +1,8 @@
 #!/bin/bash
 
-showHelp () {
-  local scriptname="$(basename $0)"
-  echo "Example usage and output: 
-\$ $scriptname Voorschoten 
-Voorschoten 🚲 1
-Or,
-\$ $scriptname Leiden
-Leiden Centraal, Centrumzijde 🚲 89
-Leiden Centraal,Uitgang LUMC 🚲 297
-Leiden de Vink 🚲 3
-" && exit 1
+showHelp() {
+    cat << EOF
+Usage: $(basename "$0") [OPTIONS] SEARCH_TERM
 
 }
 
