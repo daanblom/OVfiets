@@ -28,10 +28,10 @@ SEARCH_TERM — A case-insensitive string to search for in station names.
 
 # Bike count with 🚲 icon
 ./ovfiets.sh -s Rotterdam
-Output Examples
-bash
-Copy
-Edit
+```
+## Output Examples
+
+```sh
 # Default
 Utrecht Centraal 12 🚲
 
