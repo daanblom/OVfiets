@@ -24,8 +24,7 @@ EOF
 
 bikeAmount () {
   code="$1"
-  a=$(curl -s "https://ovfietsbeschikbaar.nl/locatie/$code" | grep span | grep text-primary | grep -o ">[0-9]*<" | sed -E 's/(<|>)//g')
-  echo "🚲 $a"
+  curl -s "https://ovfietsbeschikbaar.nl/locatie/$code" | grep span | grep text-primary | grep -o ">[0-9]*<" | sed -E 's/(<|>)//g'
 }
 searchLocation() {
   curl -s "https://ovfietsbeschikbaar.nl/locaties" |
@@ -35,8 +34,15 @@ searchLocation() {
     while IFS= read -r line; do
       name=$(echo "$line" | cut -d ">" -f2 | sed 's/<\/a//g')
       code=$(echo "$line" | grep -o 'locatie/[a-z0-9]*' | cut -d "/" -f2)
+      close=$(echo "$line" | grep -A 1 $(LC_TIME=nl_NL.UTF-8 date +"%A" | sed 's/.*/\u&/') | tail -n 1 | cut -d "-" -f 2 | sed 's/u<\/td>//g')
       bikes=$(bikeAmount "$code")
-      echo "$name $bikes"
+      if [[ "$output" == "clean" ]]; then
+        echo $bikes
+      elif [[ $output == "statusbar" ]]; then
+        echo "$bikes 🚲"
+      elif [[ ! -n $output ]]; then
+        echo "$name $bikes 🚲"
+      fi
     done
 }
 
